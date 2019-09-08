@@ -1,9 +1,5 @@
 package com.daojia.datastructures.learn.List.PalindromicNumber;
 
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import java.util.LinkedList;
-
 /**
  * @Author: maosen
  * @Description: 单链表类
@@ -45,7 +41,7 @@ public class SingleLinkedList<T> {
      */
     public boolean add(int index, T item) {
         int size = size();
-        if (index < 0 || index > size){
+        if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException();
         }
         //第index-1个节点
@@ -57,7 +53,7 @@ public class SingleLinkedList<T> {
         }
         //增加节点
         Node<T> nextNode = preNode.next;
-        Node<T> newNode = new Node<>(item,nextNode);
+        Node<T> newNode = new Node<>(item, nextNode);
         preNode.next = newNode;
         return true;
     }
@@ -70,7 +66,7 @@ public class SingleLinkedList<T> {
      */
     public boolean delete(int index) {
         int size = size();
-        if (index < 0 || index > size-1){
+        if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
         //找到第index-1个元素
@@ -95,12 +91,12 @@ public class SingleLinkedList<T> {
      * @return
      */
     public boolean deleteByValue(T item) {
-        if(size() == 0){
+        if (size() == 0) {
             return false;
         }
         Node<T> preNode = first;
-        while(preNode.next != null){
-            if(preNode.next.equals(item)){
+        while (preNode.next != null) {
+            if (preNode.next.equals(item)) {
                 Node<T> toDelNode = preNode.next;
                 Node<T> nextNode = preNode.next.next;
                 preNode.next = nextNode;
@@ -135,14 +131,14 @@ public class SingleLinkedList<T> {
     public String printListFromHead() {
         String result = "SingleLinkedList[";
         Node<T> tmp = this.first;
-        while(tmp.next != null){
+        while (tmp.next != null) {
             tmp = tmp.next;
             result += tmp + ",";
         }
-        if(size()>0){
-            result = result.substring(0,result.length()-1);
+        if (size() > 0) {
+            result = result.substring(0, result.length() - 1);
         }
-        result+= "]";
+        result += "]";
         return result;
     }
 
@@ -152,18 +148,33 @@ public class SingleLinkedList<T> {
      * @return
      */
     public String printListFromTail() {
-        return null;
+        String result = "SingleLinkedList[";
+        Node<T> current;
+        Node<T> end = null;
+        while (end != first.next) {
+            current = first.next;
+            while(current.next != end){
+                current = current.next;
+            }
+            result += current + ",";
+            end = current;
+        }
+        if (size() > 0) {
+            result = result.substring(0, result.length() - 1);
+        }
+        result += "]";
+        return result;
     }
 
     /**
      * 清空链表
      */
     public void clear() {
-        if(size()==0){
+        if (size() == 0) {
             return;
         }
         Node<T> nowNode = this.first;
-        while(nowNode.next != null){
+        while (nowNode.next != null) {
             Node<T> tmp = nowNode.next;
             nowNode.next = null;
             nowNode = tmp;

@@ -35,8 +35,10 @@ public class PalindromicNumberTest {
         //System.out.println(list.deleteByValue(4));
 
         //test clear
-        list.clear();
-        System.out.println(list);
+        //list.clear();
+
+        //test printFromTail
+        System.out.println(list.printListFromTail());
         //list.add(-1,6);
 
     }
