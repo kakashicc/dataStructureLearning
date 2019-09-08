@@ -9,7 +9,7 @@ public class PalindromicNumberTest {
 
     public static void main(String[] args) {
 
-        SingleLinkedList<Integer> list = new SingleLinkedList();
+        SingleLinkedList2<Integer> list = new SingleLinkedList2();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -20,6 +20,7 @@ public class PalindromicNumberTest {
         //list.add(1,5);
         //list.add(2,5);
         //list.add(3,5);
+        //list.add(4,5);
 
         //test delete
         //list.delete(-1);
@@ -35,9 +36,10 @@ public class PalindromicNumberTest {
         //System.out.println(list.deleteByValue(4));
 
         //test clear
-        //list.clear();
+        list.clear();
 
         //test printFromTail
+        System.out.println(list);
         System.out.println(list.printListFromTail());
         //list.add(-1,6);
 

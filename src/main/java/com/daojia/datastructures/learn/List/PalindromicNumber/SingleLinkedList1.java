@@ -2,13 +2,13 @@ package com.daojia.datastructures.learn.List.PalindromicNumber;
 
 /**
  * @Author: maosen
- * @Description: 基础单链表类  头节点永远存在
+ * @Description: 基础单链表类1 头节点可以不存在
  * @Date: Created in 2019/9/5 20:33.
  */
-public class SingleLinkedList<T> {
+public class SingleLinkedList1<T> {
 
-    public SingleLinkedList() {
-        first = new Node<>();
+    public SingleLinkedList1() {
+        first = null;
     }
 
     /**
@@ -25,6 +25,10 @@ public class SingleLinkedList<T> {
      */
     public void add(T item) {
         Node<T> newNode = new Node<>(item);
+        if (first == null) {
+            first = newNode;
+            return;
+        }
         Node<T> temp = first;
         while (temp.next != null) {
             temp = temp.next;
@@ -44,17 +48,24 @@ public class SingleLinkedList<T> {
         if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException();
         }
+        Node<T> newNode = new Node<>(item);
+        if (index == 0) {
+            newNode.next = first;
+            first = newNode;
+            return true;
+        }
+
         //第index-1个节点
         Node<T> preNode = first;
-        int nowIndex = -1;
+        int nowIndex = 0;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
         }
         //增加节点
         Node<T> nextNode = preNode.next;
-        Node<T> newNode = new Node<>(item, nextNode);
         preNode.next = newNode;
+        newNode.next = nextNode;
         return true;
     }
 
@@ -69,9 +80,16 @@ public class SingleLinkedList<T> {
         if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
+        if (index == 0) {
+            Node<T> next = first.next;
+            first.next = null;
+            first = next;
+            return true;
+        }
+
         //找到第index-1个元素
         Node<T> preNode = first;
-        int nowIndex = -1;
+        int nowIndex = 0;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
@@ -94,6 +112,14 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return false;
         }
+
+        if (first.equals(item)) {
+            Node<T> next = first.next;
+            first.next = null;
+            first = next;
+            return true;
+        }
+
         Node<T> preNode = first;
         while (preNode.next != null) {
             if (preNode.next.equals(item)) {
@@ -115,8 +141,8 @@ public class SingleLinkedList<T> {
      */
     public int size() {
         int size = 0;
-        Node<T> tmp = this.first;
-        while (tmp.next != null) {
+        Node<T> tmp = first;
+        while (tmp != null) {
             size++;
             tmp = tmp.next;
         }
@@ -130,10 +156,10 @@ public class SingleLinkedList<T> {
      */
     public String printListFromHead() {
         String result = "SingleLinkedList[";
-        Node<T> tmp = this.first;
-        while (tmp.next != null) {
-            tmp = tmp.next;
+        Node<T> tmp = first;
+        while (tmp != null) {
             result += tmp + ",";
+            tmp = tmp.next;
         }
         if (size() > 0) {
             result = result.substring(0, result.length() - 1);
@@ -151,9 +177,9 @@ public class SingleLinkedList<T> {
         String result = "SingleLinkedList[";
         Node<T> current;
         Node<T> end = null;
-        while (end != first.next) {
-            current = first.next;
-            while(current.next != end){
+        while (end != first) {
+            current = first;
+            while (current.next != end) {
                 current = current.next;
             }
             result += current + ",";
@@ -173,12 +199,7 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return;
         }
-        Node<T> nowNode = this.first;
-        while (nowNode.next != null) {
-            Node<T> tmp = nowNode.next;
-            nowNode.next = null;
-            nowNode = tmp;
-        }
+        first = null;
     }
 
 

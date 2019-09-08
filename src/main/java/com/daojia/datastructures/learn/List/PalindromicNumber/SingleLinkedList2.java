@@ -1,20 +1,27 @@
 package com.daojia.datastructures.learn.List.PalindromicNumber;
 
+import java.util.LinkedList;
+
 /**
  * @Author: maosen
- * @Description: 基础单链表类  头节点永远存在
+ * @Description: 基础单链表类  头节点永远存在,添加尾节点
  * @Date: Created in 2019/9/5 20:33.
  */
-public class SingleLinkedList<T> {
+public class SingleLinkedList2<T> {
 
-    public SingleLinkedList() {
+    public SingleLinkedList2() {
         first = new Node<>();
+        last = null;
     }
 
     /**
      * 头节点
      */
     Node<T> first;
+    /**
+     * 尾节点
+     */
+    Node<T> last;
 
 
     /**
@@ -25,11 +32,13 @@ public class SingleLinkedList<T> {
      */
     public void add(T item) {
         Node<T> newNode = new Node<>(item);
-        Node<T> temp = first;
-        while (temp.next != null) {
-            temp = temp.next;
+        if(last == null){
+            last = newNode;
+            first.next = last;
+        }else{
+            last.next = newNode;
+            last = newNode;
         }
-        temp.next = newNode;
     }
 
     /**
@@ -173,12 +182,8 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return;
         }
-        Node<T> nowNode = this.first;
-        while (nowNode.next != null) {
-            Node<T> tmp = nowNode.next;
-            nowNode.next = null;
-            nowNode = tmp;
-        }
+        first.next = null;
+        last = null;
     }
 
 
