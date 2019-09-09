@@ -14,74 +14,160 @@ public class DoubleLikedList<T> {
      */
     Node<T> head;
 
-    /**
-     * 尾结点
-     */
-    Node<T> tail;
+    public DoubleLikedList() {
+        head = new Node<T>();
+    }
 
     /**
      * 尾插入
+     *
      * @param item 元素值
      */
-    public void add(T item){
-
+    public void add(T item) {
+        Node<T> newNode = new Node<>(item);
+        Node<T> tmp = head;
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+        newNode.pre = tmp;
+        tmp.next = newNode;
     }
 
     /**
      * 头插入
+     *
      * @param item 元素值
      */
-    public void addFirst(T item){
-
+    public void addFirst(T item) {
+        Node<T> newNode = new Node<>(item);
+        Node<T> nextNode = head.next;
+        newNode.next = nextNode;
+        nextNode.pre = newNode;
+        head.next = newNode;
+        newNode.pre = head;
     }
 
     /**
      * 大小
+     *
      * @return
      */
-    public int size(){
-
+    public int size() {
+        Node<T> tmp = this.head;
+        int size = 0;
+        while (tmp.next != null) {
+            tmp = tmp.next;
+            size++;
+        }
+        return size;
     }
 
     /**
      * 删除指定位置值
+     *
      * @param index
      * @return
      */
-    public boolean delele(int index){
-
+    public boolean delele(int index) {
+        int size = size();
+        if (index < 0 || index > size - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        Node<T> preNode = this.head;
+        int nowIndex = -1;
+        while (nowIndex < index - 1) {
+            preNode = preNode.next;
+            nowIndex++;
+        }
+        Node<T> toDeleteNode = preNode.next;
+        preNode.next = toDeleteNode.next;
+        if (toDeleteNode.next != null) {
+            toDeleteNode.next.pre = preNode;
+        }
+        toDeleteNode.pre = null;
+        toDeleteNode.next = null;
+        return true;
     }
 
     /**
      * 删除指定值
+     *
      * @param value
      * @return
      */
-    public boolean deleteByValue(T value){
+    public boolean deleteByValue(T value) {
+        Node<T> preNode = this.head;
+        while (preNode.next != null) {
+            preNode = preNode.next;
+            if (preNode.equals(value)) {
+                Node<T> toDeleteNode = preNode.next;
+                preNode.next = toDeleteNode.next;
+                if (toDeleteNode.next != null) {
+                    toDeleteNode.next.pre = preNode;
+                }
+                toDeleteNode.pre = null;
+                toDeleteNode.next = null;
+                return true;
+            }
+        }
+        return false;
 
     }
 
     /**
      * 清空列表
      */
-    public void clear(){
-
+    public void clear() {
+        Node<T> nowNode = this.head;
+        while (nowNode.next != null) {
+            Node<T> tmp = nowNode.next;
+            nowNode.next = null;
+            nowNode.pre = null;
+            nowNode = tmp;
+        }
     }
 
     /**
      * 从头遍历值
+     *
      * @return
      */
-    public String getFromHead(){
-
+    public String getFromHead() {
+        String result = "DoubleLinkedList[";
+        Node<T> tmp = this.head;
+        while (tmp.next != null) {
+            tmp = tmp.next;
+            result += tmp.item + ",";
+        }
+        if (head.next != null) {
+            result = result.substring(0, result.length() - 1);
+        }
+        result += "]";
+        return result;
     }
 
     /**
      * 从尾部遍历值
+     *
      * @return
      */
-    public String getFromTail(){
-
+    public String getFromTail() {
+        String result = "DoubleLinkedList[";
+        Node<T> current;
+        Node<T> end = null;
+        while (end != head.next) {
+            current = head.next;
+            while (current.next != end) {
+                current = current.next;
+            }
+            result += current.item + ",";
+            end = current;
+        }
+        if (head.next != null) {
+            result = result.substring(0, result.length() - 1);
+        }
+        result += "]";
+        return result;
     }
 
     @Override
@@ -91,9 +177,10 @@ public class DoubleLikedList<T> {
 
     /**
      * 节点内部类
+     *
      * @param <E>
      */
-    private class Node<E>{
+    private class Node<E> {
 
         /**
          * 元素值
@@ -103,21 +190,25 @@ public class DoubleLikedList<T> {
         /**
          * 前一个节点
          */
-        Node<E> preNode;
+        Node<E> pre;
 
         /**
          * 后一个节点
          */
-        Node<E> nextNode;
+        Node<E> next;
+
+        public Node() {
+            this.item = null;
+        }
 
         public Node(E item) {
             this.item = item;
         }
 
-        public Node(E item, Node<E> preNode, Node<E> nextNode) {
+        public Node(E item, Node<E> pre, Node<E> next) {
             this.item = item;
-            this.preNode = preNode;
-            this.nextNode = nextNode;
+            this.pre = pre;
+            this.next = next;
         }
 
         @Override

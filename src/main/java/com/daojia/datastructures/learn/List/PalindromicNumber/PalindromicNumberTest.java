@@ -9,7 +9,7 @@ public class PalindromicNumberTest {
 
     public static void main(String[] args) {
 
-        SingleLinkedList<Integer> list = new SingleLinkedList();
+        DoubleLikedList<Integer> list = new DoubleLikedList();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -18,11 +18,12 @@ public class PalindromicNumberTest {
         //test addFirst
         list.addFirst(4);
         list.addFirst(5);
+        System.out.println("addFirst:"+ list);
 
         //test add
-        //list.add(0,5);
-        //list.add(1,5);
-        //list.add(2,5);
+        list.add(0,5);
+        list.add(1,5);
+        list.add(2,5);
         //list.add(3,5);
         //list.add(4,5);
 
@@ -44,7 +45,7 @@ public class PalindromicNumberTest {
 
         //test printFromTail
         System.out.println(list);
-        System.out.println(list.printListFromTail());
+        System.out.println(list.getFromTail());
         //list.add(-1,6);
 
     }
