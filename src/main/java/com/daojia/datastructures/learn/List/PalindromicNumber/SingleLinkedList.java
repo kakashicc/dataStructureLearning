@@ -18,7 +18,7 @@ public class SingleLinkedList<T> {
 
 
     /**
-     * 添加节点元素
+     * 添加节点元素  尾插
      *
      * @param item 值
      * @return
@@ -30,6 +30,19 @@ public class SingleLinkedList<T> {
             temp = temp.next;
         }
         temp.next = newNode;
+    }
+
+    /**
+     * 添加节点元素  头插
+     *
+     * @param item 值
+     * @return
+     */
+    public void addFirst(T item) {
+        Node<T> newNode = new Node<>(item);
+        Node<T> temp = first.next;
+        newNode.next = temp;
+        first.next = newNode;
     }
 
     /**

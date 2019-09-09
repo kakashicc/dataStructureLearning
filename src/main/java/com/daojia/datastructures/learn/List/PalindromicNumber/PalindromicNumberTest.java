@@ -9,11 +9,15 @@ public class PalindromicNumberTest {
 
     public static void main(String[] args) {
 
-        SingleLinkedList2<Integer> list = new SingleLinkedList2();
+        SingleLinkedList<Integer> list = new SingleLinkedList();
         list.add(1);
         list.add(2);
         list.add(3);
         System.out.println("原："+list +" size="+list.size());
+
+        //test addFirst
+        list.addFirst(4);
+        list.addFirst(5);
 
         //test add
         //list.add(0,5);
@@ -36,7 +40,7 @@ public class PalindromicNumberTest {
         //System.out.println(list.deleteByValue(4));
 
         //test clear
-        list.clear();
+        //list.clear();
 
         //test printFromTail
         System.out.println(list);
