@@ -34,6 +34,32 @@ public class DoubleLikedList<T> {
     }
 
     /**
+     * 插入指定位置
+     *
+     * @param item 元素值
+     */
+    public void add(int index,T item) {
+        Node<T> newNode = new Node<>(item);
+        int size = size();
+        if (index < 0 || index > size - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        Node<T> preNode = this.head;
+        int nowIndex = -1;
+        while (nowIndex < index - 1) {
+            preNode = preNode.next;
+            nowIndex++;
+        }
+        Node<T> nextNode = preNode.next;
+        newNode.next = nextNode;
+        newNode.pre = preNode;
+        preNode.next = newNode;
+        if(nextNode != null){
+            nextNode.pre = newNode;
+        }
+    }
+
+    /**
      * 头插入
      *
      * @param item 元素值
@@ -68,7 +94,7 @@ public class DoubleLikedList<T> {
      * @param index
      * @return
      */
-    public boolean delele(int index) {
+    public boolean delete(int index) {
         int size = size();
         if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
@@ -98,8 +124,7 @@ public class DoubleLikedList<T> {
     public boolean deleteByValue(T value) {
         Node<T> preNode = this.head;
         while (preNode.next != null) {
-            preNode = preNode.next;
-            if (preNode.equals(value)) {
+            if (preNode.next.item.equals(value)) {
                 Node<T> toDeleteNode = preNode.next;
                 preNode.next = toDeleteNode.next;
                 if (toDeleteNode.next != null) {
@@ -109,6 +134,7 @@ public class DoubleLikedList<T> {
                 toDeleteNode.next = null;
                 return true;
             }
+            preNode = preNode.next;
         }
         return false;
 

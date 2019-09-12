@@ -1,22 +1,21 @@
 package com.daojia.datastructures.learn.List.PalindromicNumber;
 
-import java.util.LinkedList;
-
 /**
  * @Author: maosen
  * @Description: 基础单链表类  头节点永远存在
  * @Date: Created in 2019/9/5 20:33.
  */
-public class SingleLinkedList<T> {
+@SuppressWarnings("all")
+public class SingleLinkedList111 {
 
-    public SingleLinkedList() {
-        first = new Node<>();
+    public SingleLinkedList111() {
+        //first = new Node<>();
     }
 
     /**
      * 头节点
      */
-    Node<T> first;
+    static Node first = new Node<Integer>();
 
 
     /**
@@ -25,13 +24,22 @@ public class SingleLinkedList<T> {
      * @param item 值
      * @return
      */
-    public void add(T item) {
-        Node<T> newNode = new Node<>(item);
-        Node<T> temp = first;
+    public static void add(Integer item) {
+        Node newNode = new Node<>(item);
+        Node temp = first;
         while (temp.next != null) {
             temp = temp.next;
         }
         temp.next = newNode;
+    }
+
+
+    public static void addNode(Node node) {
+        Node temp = first;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = node;
     }
 
     /**
@@ -40,9 +48,9 @@ public class SingleLinkedList<T> {
      * @param item 值
      * @return
      */
-    public void addFirst(T item) {
-        Node<T> newNode = new Node<>(item);
-        Node<T> temp = first.next;
+    public void addFirst(Integer item) {
+        Node newNode = new Node<>(item);
+        Node temp = first.next;
         newNode.next = temp;
         first.next = newNode;
     }
@@ -54,21 +62,21 @@ public class SingleLinkedList<T> {
      * @param item  元素值
      * @return
      */
-    public boolean add(int index, T item) {
+    public boolean add(int index, Integer item) {
         int size = size();
         if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException();
         }
         //第index-1个节点
-        Node<T> preNode = first;
+        Node preNode = first;
         int nowIndex = -1;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
         }
         //增加节点
-        Node<T> nextNode = preNode.next;
-        Node<T> newNode = new Node<>(item, nextNode);
+        Node nextNode = preNode.next;
+        Node newNode = new Node<>(item, nextNode);
         preNode.next = newNode;
         return true;
     }
@@ -85,15 +93,15 @@ public class SingleLinkedList<T> {
             throw new ArrayIndexOutOfBoundsException();
         }
         //找到第index-1个元素
-        Node<T> preNode = first;
+        Node preNode = first;
         int nowIndex = -1;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
         }
         //删除指定节点
-        Node<T> toDelNode = preNode.next;
-        Node<T> nextNode = toDelNode.next;
+        Node toDelNode = preNode.next;
+        Node nextNode = toDelNode.next;
         preNode.next = nextNode;
         toDelNode.next = null;
         return true;
@@ -105,15 +113,15 @@ public class SingleLinkedList<T> {
      * @param item 元素值
      * @return
      */
-    public boolean deleteByValue(T item) {
+    public boolean deleteByValue(Integer item) {
         if (size() == 0) {
             return false;
         }
-        Node<T> preNode = first;
+        Node preNode = first;
         while (preNode.next != null) {
             if (preNode.next.equals(item)) {
-                Node<T> toDelNode = preNode.next;
-                Node<T> nextNode = preNode.next.next;
+                Node toDelNode = preNode.next;
+                Node nextNode = preNode.next.next;
                 preNode.next = nextNode;
                 toDelNode.next = null;
                 return true;
@@ -123,13 +131,13 @@ public class SingleLinkedList<T> {
         return false;
     }
 
-    public Node<T> getNode(int index){
+    public static Node getNode(int index){
         int size = size();
         if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
         int nowIndex = -1;
-        Node<T> tmp = this.first;
+        Node tmp = first;
         while(tmp.next != null){
             tmp = tmp.next;
             nowIndex++;
@@ -145,9 +153,9 @@ public class SingleLinkedList<T> {
      *
      * @return
      */
-    public int size() {
+    public static int size() {
         int size = 0;
-        Node<T> tmp = this.first;
+        Node tmp = first;
         while (tmp.next != null) {
             size++;
             tmp = tmp.next;
@@ -160,16 +168,21 @@ public class SingleLinkedList<T> {
      *
      * @return
      */
-    public String printListFromHead() {
+    public static String printListFromHead() {
         String result = "SingleLinkedList[";
-        Node<T> tmp = this.first;
+        Node tmp = first;
+        int count = 0;
         while (tmp.next != null) {
             tmp = tmp.next;
             result += tmp + ",";
+            count++;
+            if(count > 30){
+                break;
+            }
         }
-        if (size() > 0) {
+        /*if (size() > 0) {
             result = result.substring(0, result.length() - 1);
-        }
+        }*/
         result += "]";
         return result;
     }
@@ -179,10 +192,10 @@ public class SingleLinkedList<T> {
      *
      * @return
      */
-    public String printListFromTail() {
+    public String printListFromIntegerail() {
         String result = "SingleLinkedList[";
-        Node<T> current;
-        Node<T> end = null;
+        Node current;
+        Node end = null;
         while (end != first.next) {
             current = first.next;
             while(current.next != end){
@@ -205,9 +218,9 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return;
         }
-        Node<T> nowNode = this.first;
+        Node nowNode = first;
         while (nowNode.next != null) {
-            Node<T> tmp = nowNode.next;
+            Node tmp = nowNode.next;
             nowNode.next = null;
             nowNode = tmp;
         }
@@ -222,9 +235,9 @@ public class SingleLinkedList<T> {
         }
 
         //慢指针
-        Node<T> slow = this.first;
+        Node slow = first;
         //快指针
-        Node<T> fast = this.first;
+        Node fast = first;
         while(fast != null){
             slow = slow.next;
             fast = fast.next;
@@ -236,27 +249,33 @@ public class SingleLinkedList<T> {
                 return true;
             }
         }
-        LinkedList list1 = new LinkedList();
-        list1.iterator();
         return false;
     }
 
-    public SingleLinkedList<Integer> buildCycleList(){
-        SingleLinkedList<Integer> list = new SingleLinkedList<>();
-        list.add(0);
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        Node<Integer> node2 = (Node<Integer>) list.getNode(2);
-        Node<Integer> node0 = (Node<Integer>) list.getNode(0);
-        node2.next = node0;
-        return list;
+    public static void buildCycleList(){
+        add(0);
+        add(1);
+        add(2);
+        add(3);
+        add(4);
+
+        //System.out.println(this);
+        Node node4 = (Node) getNode(4);
+        Node node1 = (Node) getNode(1);
+        Node node = new Node<>(5, node1);
+        addNode(node);
+        //System.out.println(node4.next);
+        //System.out.println(node1.next);
+        //node4.next = node1;
+        System.out.println(printListFromHead());
+        //return this;
     }
 
     public static void main(String[] args) {
-        SingleLinkedList<Integer> list = new SingleLinkedList<>().buildCycleList();
-        System.out.println(list.hasCycle());
+        buildCycleList();
+        //System.out.println(list.hasCycle());
     }
+
 
 
 
