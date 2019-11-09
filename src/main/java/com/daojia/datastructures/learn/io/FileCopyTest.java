@@ -1,4 +1,4 @@
-package com.daojia.datastructures.learn.List.io;
+package com.daojia.datastructures.learn.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

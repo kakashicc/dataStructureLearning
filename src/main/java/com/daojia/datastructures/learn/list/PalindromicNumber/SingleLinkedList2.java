@@ -1,20 +1,27 @@
-package com.daojia.datastructures.learn.List.PalindromicNumber;
+package com.daojia.datastructures.learn.list.PalindromicNumber;
+
+import java.util.LinkedList;
 
 /**
  * @Author: maosen
- * @Description: 基础单链表类1 头节点可以不存在
+ * @Description: 基础单链表类  头节点永远存在,添加尾节点
  * @Date: Created in 2019/9/5 20:33.
  */
-public class SingleLinkedList1<T> {
+public class SingleLinkedList2<T> {
 
-    public SingleLinkedList1() {
-        first = null;
+    public SingleLinkedList2() {
+        first = new Node<>();
+        last = null;
     }
 
     /**
      * 头节点
      */
     Node<T> first;
+    /**
+     * 尾节点
+     */
+    Node<T> last;
 
 
     /**
@@ -25,15 +32,13 @@ public class SingleLinkedList1<T> {
      */
     public void add(T item) {
         Node<T> newNode = new Node<>(item);
-        if (first == null) {
-            first = newNode;
-            return;
+        if(last == null){
+            last = newNode;
+            first.next = last;
+        }else{
+            last.next = newNode;
+            last = newNode;
         }
-        Node<T> temp = first;
-        while (temp.next != null) {
-            temp = temp.next;
-        }
-        temp.next = newNode;
     }
 
     /**
@@ -48,24 +53,17 @@ public class SingleLinkedList1<T> {
         if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        Node<T> newNode = new Node<>(item);
-        if (index == 0) {
-            newNode.next = first;
-            first = newNode;
-            return true;
-        }
-
         //第index-1个节点
         Node<T> preNode = first;
-        int nowIndex = 0;
+        int nowIndex = -1;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
         }
         //增加节点
         Node<T> nextNode = preNode.next;
+        Node<T> newNode = new Node<>(item, nextNode);
         preNode.next = newNode;
-        newNode.next = nextNode;
         return true;
     }
 
@@ -80,16 +78,9 @@ public class SingleLinkedList1<T> {
         if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if (index == 0) {
-            Node<T> next = first.next;
-            first.next = null;
-            first = next;
-            return true;
-        }
-
         //找到第index-1个元素
         Node<T> preNode = first;
-        int nowIndex = 0;
+        int nowIndex = -1;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
@@ -112,14 +103,6 @@ public class SingleLinkedList1<T> {
         if (size() == 0) {
             return false;
         }
-
-        if (first.equals(item)) {
-            Node<T> next = first.next;
-            first.next = null;
-            first = next;
-            return true;
-        }
-
         Node<T> preNode = first;
         while (preNode.next != null) {
             if (preNode.next.equals(item)) {
@@ -141,8 +124,8 @@ public class SingleLinkedList1<T> {
      */
     public int size() {
         int size = 0;
-        Node<T> tmp = first;
-        while (tmp != null) {
+        Node<T> tmp = this.first;
+        while (tmp.next != null) {
             size++;
             tmp = tmp.next;
         }
@@ -156,10 +139,10 @@ public class SingleLinkedList1<T> {
      */
     public String printListFromHead() {
         String result = "SingleLinkedList[";
-        Node<T> tmp = first;
-        while (tmp != null) {
-            result += tmp + ",";
+        Node<T> tmp = this.first;
+        while (tmp.next != null) {
             tmp = tmp.next;
+            result += tmp + ",";
         }
         if (size() > 0) {
             result = result.substring(0, result.length() - 1);
@@ -177,9 +160,9 @@ public class SingleLinkedList1<T> {
         String result = "SingleLinkedList[";
         Node<T> current;
         Node<T> end = null;
-        while (end != first) {
-            current = first;
-            while (current.next != end) {
+        while (end != first.next) {
+            current = first.next;
+            while(current.next != end){
                 current = current.next;
             }
             result += current + ",";
@@ -199,7 +182,8 @@ public class SingleLinkedList1<T> {
         if (size() == 0) {
             return;
         }
-        first = null;
+        first.next = null;
+        last = null;
     }
 
 

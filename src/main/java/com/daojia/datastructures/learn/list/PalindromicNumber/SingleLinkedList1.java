@@ -1,16 +1,14 @@
-package com.daojia.datastructures.learn.List.PalindromicNumber;
-
-import java.util.LinkedList;
+package com.daojia.datastructures.learn.list.PalindromicNumber;
 
 /**
  * @Author: maosen
- * @Description: 基础单链表类  头节点永远存在
+ * @Description: 基础单链表类1 头节点可以不存在
  * @Date: Created in 2019/9/5 20:33.
  */
-public class SingleLinkedList<T> {
+public class SingleLinkedList1<T> {
 
-    public SingleLinkedList() {
-        first = new Node<>();
+    public SingleLinkedList1() {
+        first = null;
     }
 
     /**
@@ -20,31 +18,22 @@ public class SingleLinkedList<T> {
 
 
     /**
-     * 添加节点元素  尾插
+     * 添加节点元素
      *
      * @param item 值
      * @return
      */
     public void add(T item) {
         Node<T> newNode = new Node<>(item);
+        if (first == null) {
+            first = newNode;
+            return;
+        }
         Node<T> temp = first;
         while (temp.next != null) {
             temp = temp.next;
         }
         temp.next = newNode;
-    }
-
-    /**
-     * 添加节点元素  头插
-     *
-     * @param item 值
-     * @return
-     */
-    public void addFirst(T item) {
-        Node<T> newNode = new Node<>(item);
-        Node<T> temp = first.next;
-        newNode.next = temp;
-        first.next = newNode;
     }
 
     /**
@@ -59,17 +48,24 @@ public class SingleLinkedList<T> {
         if (index < 0 || index > size) {
             throw new ArrayIndexOutOfBoundsException();
         }
+        Node<T> newNode = new Node<>(item);
+        if (index == 0) {
+            newNode.next = first;
+            first = newNode;
+            return true;
+        }
+
         //第index-1个节点
         Node<T> preNode = first;
-        int nowIndex = -1;
+        int nowIndex = 0;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
         }
         //增加节点
         Node<T> nextNode = preNode.next;
-        Node<T> newNode = new Node<>(item, nextNode);
         preNode.next = newNode;
+        newNode.next = nextNode;
         return true;
     }
 
@@ -84,9 +80,16 @@ public class SingleLinkedList<T> {
         if (index < 0 || index > size - 1) {
             throw new ArrayIndexOutOfBoundsException();
         }
+        if (index == 0) {
+            Node<T> next = first.next;
+            first.next = null;
+            first = next;
+            return true;
+        }
+
         //找到第index-1个元素
         Node<T> preNode = first;
-        int nowIndex = -1;
+        int nowIndex = 0;
         while (nowIndex < index - 1) {
             preNode = preNode.next;
             nowIndex++;
@@ -109,6 +112,14 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return false;
         }
+
+        if (first.equals(item)) {
+            Node<T> next = first.next;
+            first.next = null;
+            first = next;
+            return true;
+        }
+
         Node<T> preNode = first;
         while (preNode.next != null) {
             if (preNode.next.equals(item)) {
@@ -123,23 +134,6 @@ public class SingleLinkedList<T> {
         return false;
     }
 
-    public Node<T> getNode(int index){
-        int size = size();
-        if (index < 0 || index > size - 1) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        int nowIndex = -1;
-        Node<T> tmp = this.first;
-        while(tmp.next != null){
-            tmp = tmp.next;
-            nowIndex++;
-            if(nowIndex == index){
-                return tmp;
-            }
-        }
-        return null;
-    }
-
     /**
      * 返回链表长度
      *
@@ -147,8 +141,8 @@ public class SingleLinkedList<T> {
      */
     public int size() {
         int size = 0;
-        Node<T> tmp = this.first;
-        while (tmp.next != null) {
+        Node<T> tmp = first;
+        while (tmp != null) {
             size++;
             tmp = tmp.next;
         }
@@ -162,10 +156,10 @@ public class SingleLinkedList<T> {
      */
     public String printListFromHead() {
         String result = "SingleLinkedList[";
-        Node<T> tmp = this.first;
-        while (tmp.next != null) {
-            tmp = tmp.next;
+        Node<T> tmp = first;
+        while (tmp != null) {
             result += tmp + ",";
+            tmp = tmp.next;
         }
         if (size() > 0) {
             result = result.substring(0, result.length() - 1);
@@ -183,9 +177,9 @@ public class SingleLinkedList<T> {
         String result = "SingleLinkedList[";
         Node<T> current;
         Node<T> end = null;
-        while (end != first.next) {
-            current = first.next;
-            while(current.next != end){
+        while (end != first) {
+            current = first;
+            while (current.next != end) {
                 current = current.next;
             }
             result += current + ",";
@@ -205,60 +199,76 @@ public class SingleLinkedList<T> {
         if (size() == 0) {
             return;
         }
-        Node<T> nowNode = this.first;
-        while (nowNode.next != null) {
-            Node<T> tmp = nowNode.next;
-            nowNode.next = null;
-            nowNode = tmp;
-        }
+        first = null;
     }
+
 
     /**
-     * 是否有环
+     * 内部类 节点元素
+     *
+     * @param <E> 节点类型
      */
-    public boolean hasCycle(){
-        if(size() == 0){
-            return false;
+    private class Node<E> {
+        /**
+         * 节点元素
+         */
+        E item;
+
+        /**
+         * 下一个节点
+         */
+        Node<E> next = null;
+
+        /**
+         * 构造方法
+         *
+         * @param item
+         * @param next
+         */
+        public Node(E item, Node<E> next) {
+            this.item = item;
+            this.next = next;
         }
 
-        //慢指针
-        Node<T> slow = this.first;
-        //快指针
-        Node<T> fast = this.first;
-        while(fast != null){
-            slow = slow.next;
-            fast = fast.next;
-            if(fast ==null){
-                return false;
-            }
-            fast = fast.next;
-            if(slow == fast){
-                return true;
-            }
+        /**
+         * 构造方法
+         *
+         * @param item
+         */
+        public Node(E item) {
+            this.item = item;
         }
-        LinkedList list1 = new LinkedList();
-        list1.iterator();
-        return false;
+
+        /**
+         * 构造方法
+         */
+        public Node() {
+            this.item = null;
+        }
+
+        public E getItem() {
+            return item;
+        }
+
+        public void setItem(E item) {
+            this.item = item;
+        }
+
+        @Override
+        public String toString() {
+            return item.toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return item.equals(o);
+        }
+
+        @Override
+        public int hashCode() {
+            return item.hashCode();
+        }
     }
-
-    public SingleLinkedList<Integer> buildCycleList(){
-        SingleLinkedList<Integer> list = new SingleLinkedList<>();
-        list.add(0);
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        Node<Integer> node2 = (Node<Integer>) list.getNode(2);
-        Node<Integer> node0 = (Node<Integer>) list.getNode(0);
-        node2.next = node0;
-        return list;
-    }
-
-    public static void main(String[] args) {
-        SingleLinkedList<Integer> list = new SingleLinkedList<>().buildCycleList();
-        System.out.println(list.hasCycle());
-    }
-
-
 
     @Override
     public String toString() {

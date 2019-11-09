@@ -1,4 +1,4 @@
-package com.daojia.datastructures.learn.List.PalindromicNumber;
+package com.daojia.datastructures.learn.list.PalindromicNumber;
 
 /**
  * @Author: maosen
