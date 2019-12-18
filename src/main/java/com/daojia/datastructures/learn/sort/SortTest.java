@@ -19,8 +19,8 @@ public class SortTest {
 //        String methodName = "bubbleSort";
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
-        String methodName = "mergeSort";
-//        String methodName = "bubbleSort";
+//        String methodName = "mergeSort";
+        String methodName = "quickSort";
         SortTest st = SortTest.class.newInstance();
         Method method = st.getClass().getMethod(methodName, int[].class);
         testSort(st, method);
@@ -207,6 +207,98 @@ public class SortTest {
             }
         }
 
+    }
+
+    /**
+     * quick sort
+     *
+     * @param a
+     */
+    public static void quickSort(int[] a) {
+        quickSortInternally(a, 0, a.length - 1);
+    }
+
+    private static void quickSortInternally(int[] a, int p, int r) {
+        //递归终止条件
+        if (p >= r) {
+            return;
+        }
+        //获取中间元素index
+        int q = partition2(a, p, r);
+        quickSortInternally(a, p, q - 1);
+        quickSortInternally(a, q + 1, r);
+    }
+
+    /**
+     * 左右分组
+     *
+     * @param a
+     * @param p
+     * @param r
+     * @return
+     */
+    private static int partition(int[] a, int left, int right) {
+        //取最后一个元素作为基准点
+        int pivot = a[right];
+        //i指向大值,j指向小值
+        int i = left;
+        for (int j = left; j < right; j++) {
+            if (a[j] < pivot) {
+                if (i == j) {
+                    //相同，不交换
+                    i++;
+                } else {
+                    //指向不同，交换值
+                    int temp = a[i];
+                    a[i] = a[j];
+                    a[j] = temp;
+                    i++;
+                }
+            }
+        }
+        //循环遍历完成后,交换pivot位置
+        int temp = a[i];
+        a[i] = pivot;
+        a[right] = temp;
+        //返回参照元素索引
+        return i;
+    }
+
+    private static int partition2(int[] a, int left, int right) {
+        //取最后一个元素作为基准点
+        int pivot = a[right];
+        //i指向左边值,j指向右边值
+        int i = left;
+        int j = right - 1;
+
+        while(true){
+            //左标记大于参照值 || 左标记到最右边时,循环停止
+            while (a[i] <= pivot && i < right) {
+                i++;
+            }
+            //右标记小于等于参照值 ||右标记与左标记重合时,循环停止
+            while (a[j] > pivot && j > i) {
+                j--;
+            }
+
+            if (i == j || i == right) {
+                //标记汇合 或者 左标记到达最右边 循环停止
+                int temp = a[i];
+                a[i] = pivot;
+                a[right] = temp;
+                break;
+            }
+
+            if (i != j) {
+                //循环未停止 只交换值
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+
+        }
+        //返回参照元素索引
+        return i;
     }
 
 
