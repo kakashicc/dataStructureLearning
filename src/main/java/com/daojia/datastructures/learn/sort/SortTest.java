@@ -16,6 +16,15 @@ import java.util.Collections;
 public class SortTest {
 
     public static void main(String[] args) throws Exception {
+        for (int k = 1; k <= 10; k++) {
+            int[] a = gennerateArray(10, 100);
+           /* a = new int[]{3,1,2};
+            k=3;*/
+            int maxKValue = getMaxKValue(a, k);
+            Arrays.sort(a);
+            System.out.println("arr=" + Arrays.toString(a));
+            System.out.println("第"+k+"大的元素为："+maxKValue);
+        }
 //        String methodName = "bubbleSort";
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
@@ -299,6 +308,30 @@ public class SortTest {
         }
         //返回参照元素索引
         return i;
+    }
+
+    public static int getMaxKValue(int[] a,int k){
+        if(k>a.length || k<=0){
+            throw new RuntimeException("参数异常");
+        }
+        return getMaxKValueInternally(a, 0, a.length - 1, k);
+    }
+
+    public static int getMaxKValueInternally(int []a,int left,int right,int k){
+        //获取参照index
+        int q = partition(a,left,right);
+        if(right-q >= k ){
+            //处理右边部分
+            left = q+1;
+        }else if(right-q+1 == k){
+            //
+            return a[q];
+        }else{
+            //处理左边部分
+            k = k-(right-q+1);
+            right = q-1 ;
+        }
+        return getMaxKValueInternally(a,left,right,k);
     }
 
 
