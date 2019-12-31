@@ -1,9 +1,11 @@
 package com.daojia.datastructures.learn.sort;
 
+import sun.management.snmp.util.MibLogger;
 import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -16,6 +18,17 @@ import java.util.Collections;
 public class SortTest {
 
     public static void main(String[] args) throws Exception {
+       /* BigDecimal decimal = new BigDecimal("5");
+        System.out.println(squrtTest(decimal));
+        System.out.println(Math.sqrt(decimal.doubleValue()));
+
+        System.out.println(squrtTest2(decimal.doubleValue()));*/
+        int[] a = {1, 2, 3, 4, 5, 5,6};
+        int k = 8;
+        System.out.println(binarySearch(a, k));
+        System.out.println("fisrtIndex:"+getFirstEqualsWithBinarySearch(a,k));
+        System.out.println("lastIndex:"+getLastEqualsWithBinarySearch(a,k));
+        System.out.println("lastEqualsOrLowerIndex:"+getLastEqualsOrLowerWithBinarySearch(a,k));
         /*for (int k = 1; k <= 10; k++) {
             int[] a = gennerateArray(10, 100);
            *//* a = new int[]{3,1,2};
@@ -395,6 +408,115 @@ public class SortTest {
                 a[k++] = buckets[i][j];
             }
         }
+    }
+
+    public static int binarySearch(int[] a, int k) {
+        int left = 0;
+        int right = a.length - 1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                return middle;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return -1;
+    }
+
+    public static int getFirstEqualsWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                targetIndex = middle;
+                right = middle-1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static int getLastEqualsWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                targetIndex = middle;
+                left = middle+1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static int getLastEqualsOrLowerWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] <= k) {
+                targetIndex = middle;
+                right = middle - 1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static BigDecimal squrtTest(BigDecimal a) {
+        BigDecimal left = BigDecimal.ZERO;
+        BigDecimal right = a;
+        BigDecimal c = (left.add(right)).divide(new BigDecimal("2"));
+        System.out.println(a.subtract(c.multiply(c)));
+        BigDecimal b;
+        while (true) {
+            b = (left.add(right)).divide(new BigDecimal("2"));
+            if ((a.subtract(b.multiply(b)).compareTo(new BigDecimal("0")) > 0) && (a.subtract(b.multiply(b)).compareTo(new BigDecimal("0.000001")) < 0)) {
+                break;
+            }
+            if (b.multiply(b).equals(a)) {
+                return b;
+            } else if (b.multiply(b).compareTo(a) > 0) {
+                right = b.add(new BigDecimal("0.000001"));
+            } else {
+                left = b.subtract(new BigDecimal("0.000001"));
+                ;
+            }
+        }
+        return b;
+    }
+
+    public static double squrtTest2(double a) {
+        double left = 0.0;
+        double right = a;
+        double middle = (left + right) / 2;
+        ;
+        while (Math.abs(a - middle * middle) > 0.000001) {
+            middle = (left + right) / 2;
+            if (a == middle) {
+                break;
+            }else if(a > middle*middle){
+                left = middle;
+            }else{
+                right = middle;
+            }
+        }
+        return middle;
     }
 
     /**
