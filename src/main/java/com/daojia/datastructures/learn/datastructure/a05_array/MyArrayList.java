@@ -1,5 +1,7 @@
 package com.daojia.datastructures.learn.datastructure.a05_array;
 
+import java.util.Arrays;
+
 /**
  * @Author: maosen
  * @Description: ArrayList
@@ -21,7 +23,7 @@ public class MyArrayList<T> {
      * 无参构造
      */
     public MyArrayList() {
-
+        this(10);
     }
 
     /**
@@ -169,8 +171,8 @@ public class MyArrayList<T> {
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
         }
-        size--;
         data[size - 1] = null;
+        size--;
 
         if (size == data.length / 4 && data.length / 2 != 0) {
             //扩容为当前数组2倍
@@ -242,5 +244,17 @@ public class MyArrayList<T> {
             result[i] = data[i];
         }
         data = result;
+    }
+
+    @Override
+    public String toString() {
+        String sb = new String("MyArrayList:");
+        for (int i = 0; i < size ; i++) {
+            sb += (data[i]+",");
+        }
+        if(sb.lastIndexOf(",") != -1){
+            sb = sb.substring(0,sb.lastIndexOf(","));
+        }
+        return sb;
     }
 }
