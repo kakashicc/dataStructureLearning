@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @Author: maosen
@@ -39,11 +40,15 @@ public class SortTest {
             System.out.println("第" + k + "大的元素为：" + maxKValue);
         }*/
 //        String methodName = "bubbleSort";
+            //System.out.println("第"+k+"大的元素为："+maxKValue);
+
+        //String methodName = "bubbleSort";
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
 //        String methodName = "mergeSort";
 //        String methodName = "quickSort";
         String methodName = "bucketSort";
+//        String methodName = "quickSort";
         SortTest st = SortTest.class.newInstance();
         Method method = st.getClass().getMethod(methodName, int[].class);
         testSort(st, method);
@@ -59,6 +64,7 @@ public class SortTest {
         long endTime = System.currentTimeMillis();
         System.out.println("耗时：" + (endTime - startTime) + "ms");*/
     }
+
 
     /**
      * bubble sort

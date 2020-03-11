@@ -1,11 +1,7 @@
 package com.daojia.datastructures.learn;
 
-import com.alibaba.fastjson.JSON;
 import com.daojia.datastructures.learn.datastructure.a05_array.MyArrayList;
-import com.daojia.datastructures.learn.reflect.Book;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLinkedList;
 
 /**
  * @Author: maosen
@@ -16,11 +12,11 @@ public class Test {
 
     public static void main(String[] args) {
 
-        MyArrayList<Integer> list = new MyArrayList<>();
-        list.addLast(1);
-        list.addLast(2);
-        list.addLast(3);
-        list.addLast(4);
+        MySingleLinkedList<Integer> list = new MySingleLinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
         System.out.println("原list:"+list);
         list.remove(0);
         System.out.println("删除index=0"+list);

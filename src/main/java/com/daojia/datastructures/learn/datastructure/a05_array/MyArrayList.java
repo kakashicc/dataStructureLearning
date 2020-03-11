@@ -155,7 +155,7 @@ public class MyArrayList<T> {
     /**
      * 尾插
      */
-    public void addLast(T e) {
+    public void add(T e) {
         add(size, e);
     }
 

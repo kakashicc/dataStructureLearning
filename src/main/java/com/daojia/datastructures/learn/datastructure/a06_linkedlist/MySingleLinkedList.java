@@ -122,7 +122,7 @@ public class MySingleLinkedList<T> {
      */
     public void add(int index, T e) {
         checkIndexAdd(index);
-        Node<T> preNode = null;
+        Node<T> preNode = head;
         if (index == 0) {
             Node<T> newNode = new Node<>(e, head);
             head = newNode;
@@ -136,6 +136,85 @@ public class MySingleLinkedList<T> {
         }
         size++;
     }
+
+    /**
+     * 添加到头部
+     * @param e
+     */
+    public void addHead(T e){
+        add(0, e);
+    }
+
+    /**
+     * 尾部添加元素
+     * @param e
+     */
+    public void add(T e){
+        add(size,e);
+    }
+
+    /**
+     * 移除元素
+     * @param index
+     * @return
+     */
+    public T remove(int index){
+        checkIndex(index);
+        T result;
+        if(index == 0){
+            result = head.data;
+            head = head.next;
+        }else{
+            Node<T> preNode = this.head;
+            for (int i = 0; i < index-1; i++) {
+                preNode = preNode.next;
+            }
+            Node<T> nowNode = preNode.next;
+            preNode.next = nowNode.next;
+            result = nowNode.data;
+            nowNode.next = null;
+        }
+        size--;
+        return result;
+    }
+
+    /**
+     * 移除头元素
+     * @return
+     */
+    public T removeFirst(){
+        if(size == 0){
+            return null;
+        }
+        return remove(0);
+    }
+
+    /**
+     * 移除尾部元素
+     * @return
+     */
+    public T removeLast(){
+        if(size == 0){
+            return null;
+        }
+        return remove(size-1);
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public boolean removeElement(T e){
+        int index = getIndex(e);
+        if(index == -1){
+            return false;
+        }else{
+            remove(index);
+            return true;
+        }
+    }
+
 
     private void checkIndexAdd(int index) {
         if (index < 0 || index > size) {
@@ -155,6 +234,18 @@ public class MySingleLinkedList<T> {
         }
     }
 
+    @Override
+    public String toString() {
+        Node<T> nowNode = this.head;
+        String s = "MySingleLinkedList{";
+        for (int i = 0; i < size; i++) {
+            s += nowNode.data+",";
+            nowNode = nowNode.next;
+        }
+        s = s.substring(0,s.lastIndexOf(","));
+        s = s+"}";
+        return s;
+    }
 
     class Node<E> {
 
