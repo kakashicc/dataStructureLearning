@@ -1,9 +1,11 @@
 package com.daojia.datastructures.learn.sort;
 
+import sun.management.snmp.util.MibLogger;
 import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -16,20 +18,32 @@ import java.util.Collections;
 public class SortTest {
 
     public static void main(String[] args) throws Exception {
-        for (int k = 1; k <= 10; k++) {
+       /* BigDecimal decimal = new BigDecimal("5");
+        System.out.println(squrtTest(decimal));
+        System.out.println(Math.sqrt(decimal.doubleValue()));
+
+        System.out.println(squrtTest2(decimal.doubleValue()));*/
+        int[] a = {1, 2, 3, 4, 5, 5,6};
+        int k = 8;
+        System.out.println(binarySearch(a, k));
+        System.out.println("fisrtIndex:"+getFirstEqualsWithBinarySearch(a,k));
+        System.out.println("lastIndex:"+getLastEqualsWithBinarySearch(a,k));
+        System.out.println("lastEqualsOrLowerIndex:"+getLastEqualsOrLowerWithBinarySearch(a,k));
+        /*for (int k = 1; k <= 10; k++) {
             int[] a = gennerateArray(10, 100);
-           /* a = new int[]{3,1,2};
-            k=3;*/
+           *//* a = new int[]{3,1,2};
+            k=3;*//*
             int maxKValue = getMaxKValue(a, k);
             Arrays.sort(a);
             System.out.println("arr=" + Arrays.toString(a));
-            System.out.println("第"+k+"大的元素为："+maxKValue);
-        }
+            System.out.println("第" + k + "大的元素为：" + maxKValue);
+        }*/
 //        String methodName = "bubbleSort";
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
 //        String methodName = "mergeSort";
-        String methodName = "quickSort";
+//        String methodName = "quickSort";
+        String methodName = "bucketSort";
         SortTest st = SortTest.class.newInstance();
         Method method = st.getClass().getMethod(methodName, int[].class);
         testSort(st, method);
@@ -280,7 +294,7 @@ public class SortTest {
         int i = left;
         int j = right - 1;
 
-        while(true){
+        while (true) {
             //左标记大于参照值 || 左标记到最右边时,循环停止
             while (a[i] <= pivot && i < right) {
                 i++;
@@ -310,28 +324,214 @@ public class SortTest {
         return i;
     }
 
-    public static int getMaxKValue(int[] a,int k){
-        if(k>a.length || k<=0){
+    public static int getMaxKValue(int[] a, int k) {
+        if (k > a.length || k <= 0) {
             throw new RuntimeException("参数异常");
         }
         return getMaxKValueInternally(a, 0, a.length - 1, k);
     }
 
-    public static int getMaxKValueInternally(int []a,int left,int right,int k){
+    public static int getMaxKValueInternally(int[] a, int left, int right, int k) {
         //获取参照index
-        int q = partition(a,left,right);
-        if(right-q >= k ){
+        int q = partition(a, left, right);
+        if (right - q >= k) {
             //处理右边部分
-            left = q+1;
-        }else if(right-q+1 == k){
+            left = q + 1;
+        } else if (right - q + 1 == k) {
             //
             return a[q];
-        }else{
+        } else {
             //处理左边部分
-            k = k-(right-q+1);
-            right = q-1 ;
+            k = k - (right - q + 1);
+            right = q - 1;
         }
-        return getMaxKValueInternally(a,left,right,k);
+        return getMaxKValueInternally(a, left, right, k);
+    }
+
+    /**
+     * 桶排序
+     *
+     * @param a
+     */
+    public static void bucketSort(int[] a) {
+        //提前结束条件
+        if (a.length <= 1) {
+            return;
+        }
+
+        /**
+         * 每个桶容量
+         */
+        int bucketSize = 10;
+
+        //获取数组值范围
+        int minValue = a[0];
+        int maxValue = a[0];
+
+        for (int i = 0; i < a.length; i++) {
+            if (minValue > a[i]) {
+                minValue = a[i];
+            } else if (maxValue < a[i]) {
+                maxValue = a[i];
+            }
+        }
+        //获得桶数量
+        int bucketCount = (maxValue - minValue) / bucketSize + 1;
+
+        //桶数据 二维数组
+        int[][] buckets = new int[bucketCount][bucketSize];
+        // 一维数组index
+        int[] indexArr = new int[bucketCount];
+
+        //将值分配到不同的桶中
+        for (int i = 0; i < a.length; i++) {
+            //获取桶index
+            int bucketIndex = (a[i] - minValue) / bucketSize;
+            //桶扩容
+            if (indexArr[bucketIndex] == buckets[bucketIndex].length) {
+                ensureCapacity(buckets, bucketIndex);
+            }
+            //分配
+            buckets[bucketIndex][indexArr[bucketIndex]] = a[i];
+            indexArr[bucketIndex]++;
+        }
+
+        //对每个桶进行快排
+        int k = 0;
+        for (int i = 0; i < bucketCount; i++) {
+            if (indexArr[i] == 0) {
+                continue;
+            }
+            //对桶进行快排
+            quickSortInternally(buckets[i], 0, indexArr[i] - 1);
+            for (int j = 0; j < indexArr[i]; j++) {
+                a[k++] = buckets[i][j];
+            }
+        }
+    }
+
+    public static int binarySearch(int[] a, int k) {
+        int left = 0;
+        int right = a.length - 1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                return middle;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return -1;
+    }
+
+    public static int getFirstEqualsWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                targetIndex = middle;
+                right = middle-1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static int getLastEqualsWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] == k) {
+                targetIndex = middle;
+                left = middle+1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            } else if (a[middle] < k) {
+                left = middle + 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static int getLastEqualsOrLowerWithBinarySearch(int[] a, int k){
+        int left = 0;
+        int right = a.length - 1;
+        int targetIndex = -1;
+        while (left <= right) {
+            int middle = (right + left) / 2;
+            if (a[middle] <= k) {
+                targetIndex = middle;
+                right = middle - 1;
+            } else if (a[middle] > k) {
+                right = middle - 1;
+            }
+        }
+        return targetIndex;
+    }
+
+    public static BigDecimal squrtTest(BigDecimal a) {
+        BigDecimal left = BigDecimal.ZERO;
+        BigDecimal right = a;
+        BigDecimal c = (left.add(right)).divide(new BigDecimal("2"));
+        System.out.println(a.subtract(c.multiply(c)));
+        BigDecimal b;
+        while (true) {
+            b = (left.add(right)).divide(new BigDecimal("2"));
+            if ((a.subtract(b.multiply(b)).compareTo(new BigDecimal("0")) > 0) && (a.subtract(b.multiply(b)).compareTo(new BigDecimal("0.000001")) < 0)) {
+                break;
+            }
+            if (b.multiply(b).equals(a)) {
+                return b;
+            } else if (b.multiply(b).compareTo(a) > 0) {
+                right = b.add(new BigDecimal("0.000001"));
+            } else {
+                left = b.subtract(new BigDecimal("0.000001"));
+                ;
+            }
+        }
+        return b;
+    }
+
+    public static double squrtTest2(double a) {
+        double left = 0.0;
+        double right = a;
+        double middle = (left + right) / 2;
+        ;
+        while (Math.abs(a - middle * middle) > 0.000001) {
+            middle = (left + right) / 2;
+            if (a == middle) {
+                break;
+            }else if(a > middle*middle){
+                left = middle;
+            }else{
+                right = middle;
+            }
+        }
+        return middle;
+    }
+
+    /**
+     * 容量扩展
+     *
+     * @param buckets
+     * @param bucketIndex
+     */
+    private static void ensureCapacity(int[][] buckets, int bucketIndex) {
+        int[] tempArr = buckets[bucketIndex];
+        int[] newArr = new int[tempArr.length * 2];
+        for (int i = 0; i < tempArr.length; i++) {
+            newArr[i] = tempArr[i];
+        }
+        buckets[bucketIndex] = newArr;
     }
 
 

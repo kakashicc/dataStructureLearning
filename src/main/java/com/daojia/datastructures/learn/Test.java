@@ -1,6 +1,7 @@
 package com.daojia.datastructures.learn;
 
 import com.alibaba.fastjson.JSON;
+import com.daojia.datastructures.learn.datastructure.a05_array.MyArrayList;
 import com.daojia.datastructures.learn.reflect.Book;
 
 import java.util.ArrayList;
@@ -14,6 +15,26 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
+
+        MyArrayList<Integer> list = new MyArrayList<>();
+        list.addLast(1);
+        list.addLast(2);
+        list.addLast(3);
+        list.addLast(4);
+        System.out.println("原list:"+list);
+        list.remove(0);
+        System.out.println("删除index=0"+list);
+        list.add(0,1);
+
+        list.remove(1);
+        System.out.println("删除index=1"+list);
+        list.add(1,2);
+
+        list.remove(3);
+        System.out.println("删除index=3"+list);
+        list.add(3,4);
+
+        System.out.println("全部恢复list="+list);
 
       /*  System.out.println("Inner.staticTime:"+Outer.Inner.innerStaticTime);
         try {

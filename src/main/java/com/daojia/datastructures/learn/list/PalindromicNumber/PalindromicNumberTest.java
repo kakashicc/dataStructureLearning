@@ -15,11 +15,13 @@ public class PalindromicNumberTest {
         list.add(2);
         list.add(1);
         System.out.println("原：" + list + " size=" + list.size());
+        System.out.println("原list:"+list);
 
         //test addFirst
         //list.addFirst(4);
         //list.addFirst(5);
         System.out.println(isPalindrome(list));
+        System.out.println("现list:"+list);
         //System.out.println("addFirst:" + list);
 
         //test add
