@@ -166,7 +166,7 @@ public class MyArrayList<T> {
      * @return
      */
     public T remove(int index) {
-        checkAddIndex(index);
+        checkIndex(index);
         T result = data[index];
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];

@@ -2,6 +2,7 @@ package com.daojia.datastructures.learn;
 
 import com.daojia.datastructures.learn.datastructure.a05_array.MyArrayList;
 import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLinkedList;
+import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLinkedList02;
 
 /**
  * @Author: maosen
@@ -12,7 +13,9 @@ public class Test {
 
     public static void main(String[] args) {
 
-        MySingleLinkedList<Integer> list = new MySingleLinkedList<>();
+        MySingleLinkedList02<Integer> list = new MySingleLinkedList02<>();
+        System.out.println(list.contains(1));
+        System.out.println(list.contains(0));
         list.add(1);
         list.add(2);
         list.add(3);

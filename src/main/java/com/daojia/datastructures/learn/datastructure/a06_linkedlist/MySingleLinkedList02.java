@@ -2,10 +2,10 @@ package com.daojia.datastructures.learn.datastructure.a06_linkedlist;
 
 /**
  * @Author: maosen
- * @Description: 单链表
+ * @Description: 有哨兵节点的单链表
  * @Date: Created in 2020/3/11 17:30.
  */
-public class MySingleLinkedList<T> {
+public class MySingleLinkedList02<T> {
 
     /**
      * 头节点
@@ -17,8 +17,8 @@ public class MySingleLinkedList<T> {
      */
     private int size;
 
-    public MySingleLinkedList() {
-
+    public MySingleLinkedList02() {
+        head = new Node(null,null);
     }
 
     /**
@@ -48,7 +48,7 @@ public class MySingleLinkedList<T> {
     public T get(int index) {
         checkIndex(index);
         int nowIndex = 0;
-        Node<T> node = this.head;
+        Node<T> node = this.head.next;
         while (nowIndex < index) {
             node = node.next;
             nowIndex++;
@@ -65,7 +65,7 @@ public class MySingleLinkedList<T> {
     public T set(int index, T e) {
         checkIndex(index);
         int nowIndex = 0;
-        Node<T> node = this.head;
+        Node<T> node = this.head.next;
         while (nowIndex < index) {
             node = node.next;
             nowIndex++;
@@ -82,7 +82,7 @@ public class MySingleLinkedList<T> {
      * @return
      */
     public int getIndex(T e) {
-        Node<T> node = this.head;
+        Node<T> node = this.head.next;
         if (e == null) {
             for (int i = 0; i < size; i++) {
                 if (node.data == null) {
@@ -123,17 +123,12 @@ public class MySingleLinkedList<T> {
     public void add(int index, T e) {
         checkIndexAdd(index);
         Node<T> preNode = head;
-        if (index == 0) {
-            Node<T> newNode = new Node<>(e, head);
-            head = newNode;
-        } else {
-            for (int i = 1; i < index; i++) {
-                preNode = preNode.next;
-            }
-            Node<T> nowNode = preNode.next;
-            Node<T> newNode = new Node<>(e, nowNode);
-            preNode.next = newNode;
+        for (int i = 0; i < index; i++) {
+            preNode = preNode.next;
         }
+        Node<T> nowNode = preNode.next;
+        Node<T> newNode = new Node<>(e, nowNode);
+        preNode.next = newNode;
         size++;
     }
 
@@ -161,19 +156,15 @@ public class MySingleLinkedList<T> {
     public T remove(int index){
         checkIndex(index);
         T result;
-        if(index == 0){
-            result = head.data;
-            head = head.next;
-        }else{
-            Node<T> preNode = this.head;
-            for (int i = 1; i < index; i++) {
-                preNode = preNode.next;
-            }
-            Node<T> nowNode = preNode.next;
-            preNode.next = nowNode.next;
-            result = nowNode.data;
-            nowNode.next = null;
+        Node<T> preNode = this.head;
+        for (int i = 0; i < index; i++) {
+            preNode = preNode.next;
         }
+        Node<T> nowNode = preNode.next;
+        preNode.next = nowNode.next;
+        result = nowNode.data;
+        nowNode.next = null;
+
         size--;
         return result;
     }
@@ -230,7 +221,7 @@ public class MySingleLinkedList<T> {
 
     @Override
     public String toString() {
-        Node<T> nowNode = this.head;
+        Node<T> nowNode = this.head.next;
         String s = "MySingleLinkedList{";
         for (int i = 0; i < size; i++) {
             s += nowNode.data+",";
