@@ -10,7 +10,7 @@ public class MySingleLinkedList02<T> {
     /**
      * 头节点
      */
-    private Node<T> head;
+     protected Node<T> head;
 
     /**
      * 链表长度

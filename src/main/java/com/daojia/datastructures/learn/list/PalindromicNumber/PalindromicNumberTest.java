@@ -1,5 +1,9 @@
 package com.daojia.datastructures.learn.list.PalindromicNumber;
 
+import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLinkedList02;
+
+import java.util.LinkedList;
+
 /**
  * @Author: maosen
  * @Description: 单链表实现回文数判断  回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。 例如：121  123321  1234321
@@ -8,6 +12,8 @@ package com.daojia.datastructures.learn.list.PalindromicNumber;
 public class PalindromicNumberTest {
 
     public static void main(String[] args) {
+
+        LinkedList linkedList = new LinkedList();
 
         SingleLinkedList<Integer> list = new SingleLinkedList();
         list.add(1);
