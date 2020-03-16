@@ -1,112 +1,202 @@
 package com.daojia.datastructures.learn.datastructure.a06_linkedlist;
 
+import javax.swing.plaf.TreeUI;
+
 /**
  * @Author: maosen
  * @Description: 单链表
- * @Date: Created in 2020/3/11 17:30.
+ * @Date: Created in 2020/3/16 10:46.
  */
 public class MySingleLinkedList<T> {
 
     /**
-     * 头节点
+     * 当前大小
      */
-    private Node<T> head;
+    int size;
 
     /**
-     * 链表长度
+     * 头节点指针
      */
-    private int size;
-
-    public MySingleLinkedList() {
-
-    }
+    Node<T> head;
 
     /**
-     * 获取当前元素个数
+     * 添加元素到指定位置
      *
-     * @return
+     * @param index 位置
+     * @param item  数据
      */
-    public int size() {
-        return size;
+    public void add(int index, T item) {
+        //校验index是否合法
+        checkAddIndex(index);
+        if (index == 0) {
+            //添加到头部   新增节点插入到头部并处理头部指针
+
+            Node newNode = new Node(item, head);
+            head = newNode;
+        } else {
+            //添加到非头部  新增节点插入到当前节点和前一节点之间
+
+            //前一节点
+            Node<T> prevNode = node(index - 1);
+            //当前节点
+            Node<T> nowNode = prevNode.next;
+            //新添加节点 指向当前index节点
+            Node<T> newNode = new Node<>(item, nowNode);
+            //前一节点指向新添加节点
+            prevNode.next = newNode;
+        }
+        size++;
     }
 
     /**
-     * 判断数组是否为空
+     * 添加到头部
      *
-     * @return
+     * @param item
      */
-    public boolean isEmpty() {
-        return size == 0;
+    public void addFirst(T item) {
+        add(0, item);
     }
 
     /**
-     * 获取index位置元素
+     * 添加到尾部
+     *
+     * @param item
+     */
+    public void add(T item) {
+        add(size, item);
+    }
+
+    /**
+     * 移除index处元素
      *
      * @param index
      * @return
      */
-    public T get(int index) {
+    public T remove(int index) {
         checkIndex(index);
-        int nowIndex = 0;
-        Node<T> node = this.head;
-        while (nowIndex < index) {
-            node = node.next;
-            nowIndex++;
-        }
-        return node.data;
-    }
+        T result;
+        if (index == 0) {
+            //移除头部元素 移除头节点,并修改head指针
 
-    /**
-     * 设置index位置元素
-     *
-     * @param index
-     * @return oldValue
-     */
-    public T set(int index, T e) {
-        checkIndex(index);
-        int nowIndex = 0;
-        Node<T> node = this.head;
-        while (nowIndex < index) {
-            node = node.next;
-            nowIndex++;
+            //下一节点
+            Node<T> nextNode = head.next;
+            //删除元素数据值
+            result = head.item;
+            //help gc
+            head.item = null;
+            head.next = null;
+            //head指向下一节点
+            head = nextNode;
+        } else {
+            //移除非头部元素  移除当前节点,并修改前后节点指针
+
+            //获取前一节点
+            Node<T> prevNode = node(index - 1);
+            //当前节点 待删除
+            Node<T> nowNode = prevNode.next;
+            //下一节点
+            Node<T> nextNode = nowNode.next;
+            //返回结果
+            result = nowNode.item;
+            //help gc
+            nowNode.next = null;
+            nowNode.item = null;
+            //前一节点指针指向后一节点
+            prevNode.next = nextNode;
         }
-        T result = node.data;
-        node.data = e;
+        size--;
         return result;
+    }
+
+    /**
+     * 移除元素
+     *
+     * @param item
+     * @return
+     */
+    public boolean removeElement(T item) {
+        Node<T> node = this.head;
+        if (item == null) {
+            for (int i = 0; i < size; i++) {
+                if (node.item == null) {
+                    remove(i);
+                    return true;
+                }
+                node = node.next;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (item.equals(node.item)) {
+                    remove(i);
+                    return true;
+                }
+                node = node.next;
+            }
+        }
+        return false;
     }
 
     /**
      * 获取元素下标
      *
-     * @param e
+     * @param item
      * @return
      */
-    public int getIndex(T e) {
+    public int getIndex(T item) {
         Node<T> node = this.head;
-        if (e == null) {
+        if (item == null) {
             for (int i = 0; i < size; i++) {
-                if (node.data == null) {
+                if (node.item == null) {
                     return i;
                 }
+                node = node.next;
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (e.equals(node.data)) {
+                if (item.equals(node.item)) {
                     return i;
                 }
+                node = node.next;
             }
         }
         return -1;
     }
 
     /**
-     * 是否包含某元素
+     * 获取下标值
      *
-     * @param e
+     * @param index
      * @return
      */
-    public boolean contains(T e) {
-        int index = getIndex(e);
+    public T get(int index) {
+        checkIndex(index);
+        Node<T> node = node(index);
+        return node.item;
+    }
+
+    /**
+     * 设置指定位置元素值
+     *
+     * @param index 指定位置
+     * @param item  新值
+     * @return 旧值
+     */
+    public T set(int index, T item) {
+        checkIndex(index);
+        Node<T> node = node(index);
+        T oldValue = node.item;
+        node.item = item;
+        return oldValue;
+    }
+
+    /**
+     * 是否包含某元素
+     *
+     * @param item
+     * @return
+     */
+    public boolean contains(T item) {
+        int index = getIndex(item);
         if (index != -1) {
             return true;
         } else {
@@ -115,170 +205,73 @@ public class MySingleLinkedList<T> {
     }
 
     /**
-     * 在index位置添加元素
-     *
-     * @param index
-     * @param e
-     */
-    public void add(int index, T e) {
-        checkIndexAdd(index);
-        Node<T> preNode = head;
-        if (index == 0) {
-            Node<T> newNode = new Node<>(e, head);
-            head = newNode;
-        } else {
-            for (int i = 1; i < index; i++) {
-                preNode = preNode.next;
-            }
-            Node<T> nowNode = preNode.next;
-            Node<T> newNode = new Node<>(e, nowNode);
-            preNode.next = newNode;
-        }
-        size++;
-    }
-
-    /**
-     * 添加到头部
-     * @param e
-     */
-    public void addHead(T e){
-        add(0, e);
-    }
-
-    /**
-     * 尾部添加元素
-     * @param e
-     */
-    public void add(T e){
-        add(size,e);
-    }
-
-    /**
-     * 移除元素
-     * @param index
-     * @return
-     */
-    public T remove(int index){
-        checkIndex(index);
-        T result;
-        if(index == 0){
-            result = head.data;
-            head = head.next;
-        }else{
-            Node<T> preNode = this.head;
-            for (int i = 1; i < index; i++) {
-                preNode = preNode.next;
-            }
-            Node<T> nowNode = preNode.next;
-            preNode.next = nowNode.next;
-            result = nowNode.data;
-            nowNode.next = null;
-        }
-        size--;
-        return result;
-    }
-
-    /**
-     * 移除头元素
-     * @return
-     */
-    public T removeFirst(){
-        return remove(0);
-    }
-
-    /**
-     * 移除尾部元素
-     * @return
-     */
-    public T removeLast(){
-        return remove(size-1);
-    }
-
-
-    /**
-     *
-     * @return
-     */
-    public boolean removeElement(T e){
-        int index = getIndex(e);
-        if(index == -1){
-            return false;
-        }else{
-            remove(index);
-            return true;
-        }
-    }
-
-
-    private void checkIndexAdd(int index) {
-        if (index < 0 || index > size) {
-            throw new ArrayIndexOutOfBoundsException("error,require index > 0 && index <= size");
-        }
-    }
-
-
-    /**
-     * 校验index是否合法
+     * 校验index合法性
      *
      * @param index
      */
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new ArrayIndexOutOfBoundsException("error,index must be > 0 and < size");
+            throw new ArrayIndexOutOfBoundsException("illegal index!require >=0 && < size");
+        }
+    }
+
+    /**
+     * 获取非null节点元素
+     *
+     * @param index
+     * @return
+     */
+    private Node<T> node(int index) {
+        Node<T> node = this.head;
+        for (int i = 1; i <= index; i++) {
+            node = node.next;
+        }
+        return node;
+    }
+
+    /**
+     * 校验添加index是否合法
+     *
+     * @param index 下标索引
+     */
+    private void checkAddIndex(int index) {
+        if (index < 0 || index > size) {
+            throw new ArrayIndexOutOfBoundsException("illegal index! require >=0 && < size");
         }
     }
 
     @Override
     public String toString() {
-        Node<T> nowNode = this.head;
-        String s = "MySingleLinkedList{";
-        for (int i = 0; i < size; i++) {
-            s += nowNode.data+",";
-            nowNode = nowNode.next;
+        if (size == 0) {
+            return "MySingleLinkedList{}";
         }
-        s = s.substring(0,s.lastIndexOf(","));
-        s = s+"}";
-        return s;
+
+        String result = "MySingleLinkedList{";
+        Node<T> node = this.head;
+        for (int i = 0; i < size; i++) {
+            result += node.item + ",";
+            node = node.next;
+        }
+        result = result.substring(0, result.lastIndexOf(","));
+        result += "}";
+        return result;
     }
 
-    class Node<E> {
+    private class Node<E> {
 
-        private E data;
+        /**
+         * 数据
+         */
+        E item;
 
-        private Node<E> next;
+        /**
+         * 下一个节点
+         */
+        Node<E> next;
 
-        public Node(E data) {
-            this.data = data;
-            next = null;
-        }
-
-        public Node(E data, Node<E> next) {
-            this.data = data;
+        public Node(E item, Node<E> next) {
+            this.item = item;
             this.next = next;
-        }
-
-        public E getData() {
-            return data;
-        }
-
-        public void setData(E data) {
-            this.data = data;
-        }
-
-        public Node<E> getNext() {
-            return next;
-        }
-
-        public void setNext(Node<E> next) {
-            this.next = next;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "data=" + data +
-                    ", next=" + next +
-                    '}';
         }
     }
 }
