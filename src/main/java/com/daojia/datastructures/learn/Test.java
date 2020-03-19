@@ -7,7 +7,10 @@ import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLink
 import com.daojia.datastructures.learn.datastructure.a06_linkedlist.MySingleLinkedList02;
 import com.daojia.datastructures.learn.datastructure.a08_stack.StackBasedOnLinkedList;
 import com.daojia.datastructures.learn.datastructure.a09_queue.ArrayQueue;
+import com.daojia.datastructures.learn.datastructure.a09_queue.CycleQueue;
+import com.daojia.datastructures.learn.datastructure.a09_queue.CycleQueueWithSize;
 import com.daojia.datastructures.learn.datastructure.a09_queue.DynamicArrayQueue;
+import com.daojia.datastructures.learn.datastructure.a09_queue.LinkedQueue;
 
 import javax.management.QueryEval;
 
@@ -20,7 +23,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        DynamicArrayQueue<Integer> queue = new DynamicArrayQueue<>(3);
+        LinkedQueue<Integer> queue = new LinkedQueue<>();
         queue.enqueue(1);
         queue.enqueue(2);
         queue.enqueue(3);
