@@ -1,5 +1,6 @@
 package com.daojia.datastructures.learn.datastructure.a11_sorts;
 
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -15,11 +16,11 @@ public class SortTest {
 
     public static void main(String[] args) throws Exception {
 
-        String methodName = "bubbleSort";
+//        String methodName = "bubbleSort";
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
 //        String methodName = "mergeSort";
-//        String methodName = "quickSort";
+        String methodName = "quickSort";
 //        String methodName = "bucketSort";
 //        String methodName = "quickSort";
         testSort(methodName);
@@ -33,7 +34,8 @@ public class SortTest {
 
 
     /**
-     * bubble sort
+     * bubble sort  原地排序、稳定排序
+     * 时间复杂度最好O(n)、最坏O(n²)、平均O(n²)
      *
      * @param a
      */
@@ -56,48 +58,55 @@ public class SortTest {
     }
 
     /**
-     * select sort
+     * select sort  原地排序、非稳定排序
+     * 时间复杂度最好O(n²)、最坏O(n²)、平均O(n²)
      *
      * @param a
      */
     public static void selectSort(int[] a) {
-        int temp;
+        int tmp;
         for (int i = 0; i < a.length - 1; i++) {
-            int tmp = i;
-            boolean changeFlag = false;
+            tmp = i;
             for (int j = i + 1; j < a.length; j++) {
                 if (a[tmp] > a[j]) {
                     tmp = j;
-                    changeFlag = true;
                 }
             }
-            if (changeFlag) {
-                temp = a[tmp];
-                a[tmp] = a[i];
-                a[i] = temp;
+            if (tmp != i) {
+                //change
+                int temp = a[i];
+                a[i] = a[tmp];
+                a[tmp] = temp;
             }
         }
+
     }
 
     /**
-     * insert sort
+     * insert sort 原地排序、稳定排序
+     * 时间复杂度最好O(n)、最坏O(n²)、平均O(n²)
      *
      * @param a
      */
     public static void insertSort(int[] a) {
+        //遍历未排序列表
         for (int i = 1; i < a.length; i++) {
+            //未排序值
             int value = a[i];
+            //前一个值
             int j = i - 1;
             while (j >= 0 && a[j] > value) {
+                //前一个元素后移一位
                 a[j + 1] = a[j];
-                --j;
+                j--;
             }
             a[j + 1] = value;
         }
     }
 
     /**
-     * merge sort
+     * 归并排序   非原地排序、稳定排序
+     * 时间复杂度最好O(nlogn)、最坏O(nlogn)、平均O(nlogn)
      *
      * @param a
      */
@@ -108,100 +117,99 @@ public class SortTest {
     /**
      * 递归计算
      *
-     * @param a 数组
-     * @param p 开始位置
-     * @param r 结束位置
+     * @param a
+     * @param p
+     * @param r
      */
     private static void mergeSortInternally(int[] a, int p, int r) {
-        //递归终止条件
         if (p >= r) {
             return;
         }
-        //取中间值递归
-        int q = p + (r - p) / 2;
+        int q = (p + r) / 2;
         mergeSortInternally(a, p, q);
         mergeSortInternally(a, q + 1, r);
-        //合并排序数组
-        //merge(a,p,q,r);
+        //普通处理
+        //merge(a, p, q, r);
+        //哨兵模式处理
         mergeBySentry(a, p, q, r);
     }
 
+
     /**
-     * 合并排序数组
+     * 合并两个有序数组
      *
-     * @param a
-     * @param p
-     * @param q
-     * @param r
+     * @param a 原数组
+     * @param p 起始位置
+     * @param q 结束位置
+     * @param r 最终结束位置
      */
     private static void merge(int[] a, int p, int q, int r) {
-        //建立临时数组获取有序数据
-        int i = p;
-        int j = q + 1;
-        int k = 0;
         int[] temp = new int[r - p + 1];
-        //临时数组赋值
-        while (i <= q && j <= r) {
-            if (a[i] <= a[j]) {
-                temp[k++] = a[i++];
+        int head1 = p;
+        int head2 = q + 1;
+        int i = 0;
+        while (head1 <= q && head2 <= r) {
+            if (a[head1] <= a[head2]) {
+                temp[i] = a[head1];
+                head1++;
             } else {
-                temp[k++] = a[j++];
+                temp[i] = a[head2];
+                head2++;
+            }
+            i++;
+        }
+        if (head1 > q) {
+            //把head2剩下的赋值给temp
+            for (; head2 <= r; head2++) {
+                temp[i] = a[head2];
+                i++;
+            }
+        } else {
+            //把head1剩下的赋值给temp
+            for (; head1 <= q; head1++) {
+                temp[i] = a[head1];
+                i++;
             }
         }
-        //剩余数组赋值
-        int start = i;
-        int end = q;
-        if (j <= r) {
-            start = j;
-            end = r;
-        }
-        while (start <= end) {
-            temp[k++] = a[start++];
-        }
 
-        //数组复制回来
-        for (int m = 0; m < r - p + 1; m++) {
-            a[p + m] = temp[m];
+        //把temp赋值回a数组
+        for (int j = 0; j < r - p + 1; j++) {
+            a[p + j] = temp[j];
         }
     }
 
     /**
-     * 哨兵模式合并数组
+     * 哨兵模式处理有序数组合并
      *
      * @param a
      * @param p
      * @param q
      * @param r
      */
-    public static void mergeBySentry(int[] a, int p, int q, int r) {
-        //建立两个临时数组
-        int[] leftArr = new int[q - p + 2];
-        int[] rightArr = new int[r - q + 1];
-
+    private static void mergeBySentry(int[] a, int p, int q, int r) {
+        int[] leftArray = new int[q - p + 2];
+        int[] rightArray = new int[r - q + 1];
         //左边数组赋值
-        for (int i = 0; i < leftArr.length - 1; i++) {
-            leftArr[i] = a[p + i];
+        for (int i = 0; i < leftArray.length - 1; i++) {
+            leftArray[i] = a[p + i];
         }
-        leftArr[q - p + 1] = Integer.MAX_VALUE;
-
+        leftArray[leftArray.length - 1] = Integer.MAX_VALUE;
         //右边数组赋值
-        for (int i = 0; i < rightArr.length - 1; i++) {
-            rightArr[i] = a[q + 1 + i];
+        for (int i = 0; i < rightArray.length - 1; i++) {
+            rightArray[i] = a[q + 1 + i];
         }
-        rightArr[r - q] = Integer.MAX_VALUE;
+        rightArray[rightArray.length - 1] = Integer.MAX_VALUE;
 
-        //排序获取
-        int i = 0;
         int j = 0;
-        int k = p;
-        while (k <= r) {
-            if (leftArr[i] <= rightArr[j]) {
-                a[k++] = leftArr[i++];
+        int k = 0;
+        int m = p;
+        while (m <= r) {
+            if (leftArray[j] <= rightArray[k]) {
+                a[m++] = leftArray[j++];
             } else {
-                a[k++] = rightArr[j++];
+                a[m++] = rightArray[k++];
             }
         }
-
     }
 
     /**
@@ -219,9 +227,77 @@ public class SortTest {
             return;
         }
         //获取中间元素index
+        //int q = partition(a, p, r);
         int q = partition2(a, p, r);
         quickSortInternally(a, p, q - 1);
         quickSortInternally(a, q + 1, r);
+    }
+
+
+    /**
+     * 左右分区，返回中间节点
+     *
+     * @param a
+     * @param left
+     * @param right
+     * @return
+     */
+    public static int partition(int[] a, int left, int right) {
+        //参照节点
+        int pivot = a[right];
+        //找大数
+        int bigIndex = left;
+        for (int littleIndex = left; littleIndex < right; littleIndex++) {
+            if (a[littleIndex] < pivot) {
+                //找到比pivot小的数，准备进行交换操作
+                if (bigIndex == littleIndex) {
+                    //未找到比pivot大的数,大数索引向右移动
+                    bigIndex++;
+                } else {
+                    //交换大小数,大数索引向右移动
+                    int temp = a[bigIndex];
+                    a[bigIndex] = a[littleIndex];
+                    a[littleIndex] = temp;
+                    bigIndex++;
+                }
+            }
+        }
+        //遍历完成后,交换pivot和bigIndex值
+        int temp = a[bigIndex];
+        a[bigIndex] = a[right];
+        a[right] = temp;
+        return bigIndex;
+    }
+
+
+    private static int partition2(int[] a, int left, int right) {
+        //最后节点为参照点
+        int pivot = a[right];
+        //从左边开始找比pivot大的节点
+        int bigIndex = left;
+        //从右边开始找比pivot小的节点
+        int littleIndex = right - 1;
+        while (true) {
+            while (a[bigIndex] <= pivot && bigIndex < right) {
+                bigIndex++;
+            }
+            while (a[littleIndex] > pivot && littleIndex > bigIndex) {
+                littleIndex--;
+            }
+            if (littleIndex == bigIndex || bigIndex == right) {
+                //循环终止条件达到
+                int temp = a[bigIndex];
+                a[bigIndex] = a[right];
+                a[right] = temp;
+                break;
+            } else {
+                //交换大小值
+                int temp = a[bigIndex];
+                a[bigIndex] = a[littleIndex];
+                a[littleIndex] = temp;
+            }
+        }
+        return bigIndex;
     }
 
     /**
@@ -232,7 +308,7 @@ public class SortTest {
      * @param r
      * @return
      */
-    private static int partition(int[] a, int left, int right) {
+   /* private static int partition(int[] a, int left, int right) {
         //取最后一个元素作为基准点
         int pivot = a[right];
         //i指向大值,j指向小值
@@ -257,9 +333,9 @@ public class SortTest {
         a[right] = temp;
         //返回参照元素索引
         return i;
-    }
+    }*/
 
-    private static int partition2(int[] a, int left, int right) {
+    /*private static int partition2(int[] a, int left, int right) {
         //取最后一个元素作为基准点
         int pivot = a[right];
         //i指向左边值,j指向右边值
@@ -294,8 +370,7 @@ public class SortTest {
         }
         //返回参照元素索引
         return i;
-    }
-
+    }*/
     public static int getMaxKValue(int[] a, int k) {
         if (k > a.length || k <= 0) {
             throw new RuntimeException("参数异常");
