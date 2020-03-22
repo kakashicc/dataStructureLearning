@@ -213,8 +213,8 @@ public class SortTest {
     }
 
     /**
-     * quick sort
-     *
+     * quick sort  原地排序、稳定排序
+     * 时间复杂度最好O(nlogn)、最坏O(n²)、平均O(nlogn)
      * @param a
      */
     public static void quickSort(int[] a) {
