@@ -20,9 +20,9 @@ public class SortTest {
 //        String methodName = "selectSort";
 //        String methodName = "insertSort";
 //        String methodName = "mergeSort";
-        String methodName = "quickSort";
-//        String methodName = "bucketSort";
 //        String methodName = "quickSort";
+//        String methodName = "bucketSort";
+        String methodName = "countingSort";
         testSort(methodName);
     }
 
@@ -215,6 +215,7 @@ public class SortTest {
     /**
      * quick sort  原地排序、稳定排序
      * 时间复杂度最好O(nlogn)、最坏O(n²)、平均O(nlogn)
+     *
      * @param a
      */
     public static void quickSort(int[] a) {
@@ -395,20 +396,82 @@ public class SortTest {
         return getMaxKValueInternally(a, left, right, k);
     }
 
-    /**
-     * 桶排序
-     *
-     * @param a
-     */
     public static void bucketSort(int[] a) {
         //提前结束条件
         if (a.length <= 1) {
             return;
         }
 
-        /**
-         * 每个桶容量
-         */
+        //设置每个桶的容量
+        int bucketLength = 10;
+
+        //遍历获取值的范围
+        int minValue = a[0];
+        int maxValue = a[0];
+
+        for (int i = 0; i < a.length; i++) {
+            if (minValue > a[i]) {
+                minValue = a[i];
+            }
+            if (maxValue < a[i]) {
+                maxValue = a[i];
+            }
+        }
+
+        //根据数值范围获取桶数量
+        int bucketCount = (maxValue - minValue) / bucketLength + 1;
+
+        //二维数组存储所有元素
+        int[][] buckets = new int[bucketCount][bucketLength];
+        //一维数组存储每个桶实际大小
+        int[] bucketSizeArr = new int[bucketCount];
+
+        //将值分配到不同的桶中
+        for (int i = 0; i < a.length; i++) {
+            //获取待分配的桶索引
+            int index = (a[i] - minValue) / bucketLength;
+            //判断扩容
+            if (buckets[index].length == bucketSizeArr[index]) {
+                ensureCapacity(buckets, index);
+            }
+            //添加元素
+            buckets[index][bucketSizeArr[index]] = a[i];
+            //当前桶实际大小+1
+            bucketSizeArr[index]++;
+        }
+
+        //对每个桶进行快排
+        int k = 0;
+        for (int i = 0; i < bucketCount; i++) {
+            if (bucketSizeArr[i] == 0) {
+                continue;
+            }
+            quickSortInternally(buckets[i], 0, bucketSizeArr[i] - 1);
+
+            //排序完成之后,再从桶赋值到原数组
+            for (int j = 0; j < bucketSizeArr[i]; j++) {
+                a[k++] = buckets[i][j];
+            }
+        }
+
+    }
+
+    /**
+     * 桶排序
+     *
+     * @param a
+     */
+    /*public static void bucketSort(int[] a) {
+        //提前结束条件
+        if (a.length <= 1) {
+            return;
+        }
+
+        */
+
+    /**
+     * 每个桶容量
+     *//*
         int bucketSize = 10;
 
         //获取数组值范围
@@ -455,7 +518,56 @@ public class SortTest {
                 a[k++] = buckets[i][j];
             }
         }
+    }*/
+
+    /**
+     * 计数排序
+     *
+     * @param a
+     * @param n
+     */
+    public static void countingSort(int[] a) {
+        if (a.length <= 1) {
+            return;
+        }
+
+        //获取数据范围0-max
+        int maxValue = a[0];
+        for (int i = 0; i < a.length; i++) {
+            if (maxValue < a[i]) {
+                maxValue = a[i];
+            }
+        }
+
+        //申请一个计数数组
+        int[] c = new int[maxValue + 1];
+
+        //遍历计算每个元素的个数,放入计数数组中
+        for (int i = 0; i < a.length; i++) {
+            c[a[i]]++;
+        }
+
+        //依次累加
+        for (int i = 1; i <= maxValue; i++) {
+            c[i] = c[i-1]+c[i];
+        }
+
+        //临时数组，存储排序之后的结果
+        int[] r = new int[a.length];
+
+        //赋值给临时数组
+        for (int i = 0; i < a.length; i++) {
+            int countValue = c[a[i]];
+            r[countValue-1] = a[i];
+            c[a[i]]--;
+        }
+
+        //结果拷贝给a数组
+        for (int i = 0; i < a.length; i++) {
+            a[i] = r[i];
+        }
     }
+
 
     public static int binarySearch(int[] a, int k) {
         int left = 0;
