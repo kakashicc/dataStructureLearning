@@ -44,5 +44,6 @@ public class Test {
         int [][] aa = new int [3][3];
         aa[0][2] = 1;
         System.out.println(aa);
+        System.out.println(aa);
     }
 }
