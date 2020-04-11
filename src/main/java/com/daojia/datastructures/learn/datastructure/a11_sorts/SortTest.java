@@ -14,7 +14,19 @@ import java.util.Arrays;
 @SuppressWarnings("all")
 public class SortTest {
 
+    public static void test(int i){
+        try {
+            Thread.currentThread().sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(i);
+        test(i+1);
+    }
+
     public static void main(String[] args) throws Exception {
+
+      test(1);
 
 //        String methodName = "bubbleSort";
 //        String methodName = "selectSort";

@@ -1,4 +1,12 @@
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Author: maosen
@@ -7,8 +15,103 @@ import java.math.BigDecimal;
  */
 public class Test {
 
+   /* public  ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1,
+            1L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            String name = "ThreadPool_" + UUID.randomUUID();
+            Thread t = new Thread(r);
+            t.setName(name);
+            return t;
+        }
+    });*/
+
+    {
+        //threadPoolExecutor.allowCoreThreadTimeOut(false);
+    }
+
+    public static void test(){
+
+        //Test test = new Test();
+        //ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ThreadFactory tf = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                String name = "ThreadPool_" + UUID.randomUUID();
+                Thread t = new Thread(r);
+                t.setName(name);
+                return t;
+            }
+        };
+        /*ExecutorService executorService = new ThreadPoolExecutor(1, 2,
+                2L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(),tf);*/
+
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2, 2,
+                1L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(), tf);
+        threadPoolExecutor.allowCoreThreadTimeOut(true);
+
+        for (int i = 0; i < 10; i++) {
+            threadPoolExecutor.execute(() -> {
+                        System.out.println(Thread.currentThread().getName());
+                    }
+            );
+            if(i==4){
+                try {
+                    System.out.println("睡眠15s");
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        try {
+            Thread.currentThread().sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-        float f = 0.1f;
+
+        //test();
+        AtomicInteger poolNumber = new AtomicInteger(Integer.MAX_VALUE-1);
+        System.out.println(poolNumber.getAndIncrement());
+        System.out.println(poolNumber.getAndIncrement());
+        System.out.println(poolNumber.getAndIncrement());
+        System.out.println(poolNumber.getAndIncrement());
+        System.out.println(poolNumber.getAndIncrement());
+
+       /* while(true){
+            System.out.println(poolNumber.getAndIncrement());
+
+        }*/
+        //System.out.println("执行完毕");
+
+        //test.threadPoolExecutor.shutdown();
+
+        //test.threadPoolExecutor.allowCoreThreadTimeOut(false);
+        /*for (int i = 0; i < 10; i++) {
+            test.threadPoolExecutor.execute(() -> {
+                        System.out.println(Thread.currentThread().getName());
+                    }
+            );
+            if(i==4){
+                try {
+                    System.out.println("睡眠15s");
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }*/
+
+
+
+       /* float f = 0.1f;
         double d = 1.0/10;
         System.out.println(f==d);   //false
 
@@ -43,6 +146,6 @@ public class Test {
 
         int [][] aa = new int [3][3];
         aa[0][2] = 1;
-        System.out.println(aa);
+        System.out.println(aa);*/
     }
 }
