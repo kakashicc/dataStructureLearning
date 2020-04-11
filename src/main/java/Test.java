@@ -1,12 +1,4 @@
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Author: maosen
@@ -146,6 +138,8 @@ public class Test {
 
         int [][] aa = new int [3][3];
         aa[0][2] = 1;
+        System.out.println(aa);
+        System.out.println(aa);
         System.out.println(aa);*/
     }
 }
