@@ -24,20 +24,21 @@ public class FactoryTest {
         System.out.println(yiLiMilk.getName());
 
         //2 简单工厂模式  用户不关心过程,只关心结果 与 对象解耦,但是与工厂耦合
+        // 每次扩展都需要修改工厂类  不符合开闭原则
         MilkFactory mf = new MilkFactory();
         Milk mengNiu = mf.getMilk("MengNiu");
         System.out.println(mengNiu.getName());
         Milk yiLi = mf.getMilk("YiLi");
         System.out.println(yiLi.getName());
 
-        //3 工厂方法模式
+        //3 工厂方法模式 符合开闭原则，但是生成了太多的工厂类
         Milk mnMilk = new MengNiuMilkFactory().getMilk();
         System.out.println(mnMilk.getName());
 
         Milk ylMilk = new YiLiMilkFactory().getMilk();
         System.out.println(ylMilk.getName());
 
-        //4 抽象工厂模式  是这样吗？？？
+        //4 抽象工厂模式  是这样吗？？？存疑
         AbsMilkFactory absMilkFactory = new AbsMilkFactory();
         Milk mengNiu1 = absMilkFactory.getMengNiu();
         System.out.println(mengNiu1.getName());
